@@ -1,0 +1,17 @@
+.left-sidebar {
+  $color-primary: rgb(0, 185, 142);
+
+  .nav-link {
+    &.active {
+      color: $color-primary;
+    }
+
+    &:hover {
+      color: $color-primary;
+    }
+  }
+
+  #sidebarnav {
+    list-style-type: none;
+  }
+}
