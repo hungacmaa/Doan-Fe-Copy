@@ -103,6 +103,8 @@ const PostList = () => {
                             <option value="Chờ trao đổi">Chờ trao đổi</option>
                             <option value="Đã trao đổi">Đã trao đổi</option>
                             <option value="Vô hiệu hóa">Vô hiệu hóa</option>
+                            {/* <option value="Vô hiệu hóa">Chờ kiểm duyệt</option>
+                            <option value="Vô hiệu hóa">Khóa</option> */}
                         </select>
                     </div>
 

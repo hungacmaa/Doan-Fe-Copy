@@ -112,6 +112,8 @@ const PostListByAccount = () => {
                             <option value="Chưa trao đổi">Chưa trao đổi</option>
                             <option value="Chờ trao đổi">Chờ trao đổi</option>
                             <option value="Đã trao đổi">Đã trao đổi</option>
+                            <option value="Chờ kiểm duyệt">Chờ kiểm duyệt</option>
+                            <option value="Khóa">Khóa</option>
                         </select>
                     </div>
 
