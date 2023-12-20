@@ -27,7 +27,7 @@ function Register() {
         }
 
         const createAccount = (account) => {
-            axios.post('http://localhost:8080/register', account).then(resp => {
+            axios.post('http://3.236.85.4:8080/register', account).then(resp => {
                 Swal.fire({
                     title: 'Đăng ký thành công !',
                     icon: 'success',
@@ -61,7 +61,7 @@ function Register() {
     }
 
     const checkUsername = (account) => {
-        return axios.post('http://localhost:8080/register/check-username', account);
+        return axios.post('http://3.236.85.4:8080/register/check-username', account);
     }
 
     return (
