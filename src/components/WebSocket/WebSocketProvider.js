@@ -59,7 +59,7 @@ const WebSocketProvider = ({children}) => {
     }
 
     if (!socket && !_.isEmpty(account)) {
-        socket = new WebSocket('ws://localhost:8080/ws/websocket');
+        socket = new WebSocket('ws://34.204.174.17:8080/ws/websocket');
         stompClient = Stomp.over(socket);
         stompClient.connect({}, onConnected, onError);
     }

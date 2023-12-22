@@ -51,7 +51,7 @@ const changeLocationAccount = (accountId, data) => {
 }
 
 const searchAroundHere = (data) => {
-    return axios.post(`http://3.236.85.4:8080${API_URL}/search-around-here`, data);
+    return instance.post(`${API_URL}/search-around-here`, data);
 }
 
 

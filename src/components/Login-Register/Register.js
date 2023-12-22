@@ -27,7 +27,7 @@ function Register() {
         }
 
         const createAccount = (account) => {
-            axios.post('http://3.236.85.4:8080/register', account).then(resp => {
+            axios.post('http://34.204.174.17:8080/register', account).then(resp => {
                 Swal.fire({
                     title: 'Đăng ký thành công !',
                     icon: 'success',

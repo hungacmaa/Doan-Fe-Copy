@@ -52,7 +52,7 @@ const CreatePost = () => {
                 images: imagesURL,
             }
 
-            axios.post("http://localhost:8080/api/posts/createPost", postDTO,
+            axios.post("http://34.204.174.17:8080/api/posts/createPost", postDTO,
                 {
                     headers: {
                         'Authorization': localStorage.getItem('token')
