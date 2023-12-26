@@ -39,25 +39,25 @@ function Register() {
                 setRegisterError(err.response.data)
             })
         }
-
-        if ("geolocation" in navigator) {
-            navigator.geolocation.getCurrentPosition(
-                position => {
-                    account.latitude = position.coords.latitude;
-                    account.longitude = position.coords.longitude;
-                    createAccount(account);
-                },
-                error => {
-                    Swal.fire({
-                        title: 'Vui lòng bật định vị để đăng ký tài khoản !',
-                        icon: 'warning',
-                        showConfirmButton: true,
-                    }).then();
-                }
-            );
-        } else {
-            createAccount(account);
-        }
+        createAccount(account);
+        // if ("geolocation" in navigator) {
+        //     navigator.geolocation.getCurrentPosition(
+        //         position => {
+        //             account.latitude = position.coords.latitude;
+        //             account.longitude = position.coords.longitude;
+        //             createAccount(account);
+        //         },
+        //         error => {
+        //             Swal.fire({
+        //                 title: 'Vui lòng bật định vị để đăng ký tài khoản !',
+        //                 icon: 'warning',
+        //                 showConfirmButton: true,
+        //             }).then();
+        //         }
+        //     );
+        // } else {
+        //     createAccount(account);
+        // }
     }
 
     const checkUsername = (account) => {
