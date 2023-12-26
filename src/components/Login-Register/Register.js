@@ -61,7 +61,7 @@ function Register() {
     }
 
     const checkUsername = (account) => {
-        return axios.post('http://3.236.85.4:8080/register/check-username', account);
+        return axios.post('http://34.204.174.17:8080/register/check-username', account);
     }
 
     return (
