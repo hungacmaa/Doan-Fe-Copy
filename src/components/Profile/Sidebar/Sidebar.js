@@ -45,13 +45,13 @@ const Sidebar = () => {
                                             <span className="hide-menu">Quản lý các bài đăng của bạn</span>
                                         </NavLink>
                                     </li>
-                                    <li className="px-3 py-2">
+                                    {/* <li className="px-3 py-2">
                                         <NavLink to="/account/manage-iso-user"
                                                  className={({isActive}) => isActive ? "nav-link active" : "nav-link"}>
                                             <i className="fa-solid fa-rectangle-list me-3"></i>
                                             <span className="hide-menu">Quản lý các món hàng bạn tìm kiếm</span>
                                         </NavLink>
-                                    </li>
+                                    </li> */}
                                     </>
                                     :
                                     account.role?.name === 'ROLE_ADMIN' ?

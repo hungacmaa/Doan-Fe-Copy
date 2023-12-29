@@ -99,17 +99,17 @@ const ProfileUser = () => {
                 </div>
                 {!_.isEmpty(posts) &&
                     <>
-                        <h2 className="text-center m-5">Danh sách sản phẩm muốn trao đổi</h2>
+                        <h2 className="text-center m-5">Danh sách bài đăng</h2>
                         <Post posts={posts} totalPages={totalPages} changePage={changePage}/>
                     </>
                 }
 
-                {!_.isEmpty(postsSearch) &&
+                {/* {!_.isEmpty(postsSearch) &&
                     <>
                         <h2 className="text-center m-5">Danh sách sản phẩm cần tìm trao đổi</h2>
                         <Post posts={postsSearch} totalPages={totalPagesSearch} changePage={changePageSearch}/>
                     </>
-                }
+                } */}
             </div>
         </div>
     );
