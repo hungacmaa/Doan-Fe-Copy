@@ -33,10 +33,10 @@ const HomePage = () => {
             setPosts(response.data.content);
             setTotalPages(response.data.totalPages);
         }).catch(error => console.log(error))
-        window.scrollTo({
-            top: 500,
-            behavior: "smooth"
-        })
+        // window.scrollTo({
+        //     top: 500,
+        //     behavior: "smooth"
+        // })
     }, [currentPage, render])
 
     useEffect(() => {
@@ -44,10 +44,10 @@ const HomePage = () => {
             setCategories(response.data);
         }).catch(error => console.log(error))
 
-        window.scrollTo({
-            top: 0,
-            behavior: "smooth"
-        })
+        // window.scrollTo({
+        //     top: 0,
+        //     behavior: "smooth"
+        // })
     }, [])
 
     const handleClick = () => {
@@ -71,11 +71,11 @@ const HomePage = () => {
                     Thêm bài viết
                 </button>
             }
-            <div className="image-container">
+            {/* <div className="image-container">
                 <img className="img-fluid w-100" src={banner} style={{height: '350px'}} alt=""/>
-            </div>
+            </div> */}
             <div className="container">
-                <h2 className="text-center m-5">Danh sách sản phẩm trao đổi</h2>
+                {/* <h2 className="text-center m-5">Danh sách sản phẩm trao đổi</h2> */}
                 <div className="mb-5 px-4 pb-4 pt-3"
                      style={{backgroundColor: "rgb(0,185,142)", borderRadius: "8px", position: 'sticky', top: '90px', zIndex: '100'}}>
                     <div className="row g-2">

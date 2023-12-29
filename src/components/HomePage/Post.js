@@ -1,9 +1,9 @@
 import React from 'react';
 import _ from 'lodash';
-import {Pagination} from "@mui/material";
-import {Link} from "react-router-dom";
+import { Pagination } from "@mui/material";
+import { Link } from "react-router-dom";
 
-const Post = ({posts, totalPages, changePage}) => {
+const Post = ({ posts, totalPages, changePage }) => {
     return (
         <div className="container">
             <div className="row g-4 min-vh-100">
@@ -17,23 +17,24 @@ const Post = ({posts, totalPages, changePage}) => {
                                             <div className="position-relative overflow-hidden">
                                                 <div>
                                                     <img className="img-thumbnail" src={post.avatar} alt=""
-                                                         style={{aspectRatio: '1/1'}}/>
+                                                        style={{ aspectRatio: '1/1' }} />
                                                 </div>
                                             </div>
                                             <div className="pt-4 px-3">
                                                 <h5 className="mb-2 text-center text-truncate">{post.title}</h5>
                                                 <p className="text-truncate mb-1">
                                                     <i className="fa-solid fa-user me-2"></i>
-                                                    Người đăng: {post.account.username}
+                                                    
+                                                    <img className={'mx-2 rounded-circle'} src={post.account.avatar} style={{ width: '40px', height: '40px' }}></img>{post.account.name}
                                                 </p>
-                                                <p className="text-truncate mb-1">
+                                                {/* <p className="text-truncate mb-1">
                                                     <i className="fa-solid fa-table-list me-2"></i>
                                                     {post.requirement}
-                                                </p>
+                                                </p> */}
                                                 <div className="d-flex justify-content-between">
                                                     <p className="text-truncate">
-                                                        <i className="fa fa-map-marker-alt me-2 color-primary"></i>
-                                                        {post.address}
+                                                        <i className="fa-solid fa-calendar-days me-2 color-primary"></i>
+                                                        {post.createdAt}
                                                     </p>
                                                     <p className="d-flex align-items-center">
                                                         <i className="fa-regular fa-eye me-2"></i>
@@ -55,7 +56,7 @@ const Post = ({posts, totalPages, changePage}) => {
             {totalPages > 0 &&
                 <div className="mt-5 d-flex justify-content-center">
                     <Pagination count={totalPages} size="large" variant="outlined" shape="rounded"
-                                onChange={changePage} color="primary"/>
+                        onChange={changePage} color="primary" />
                 </div>
             }
         </div>

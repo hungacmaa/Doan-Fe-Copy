@@ -1,23 +1,23 @@
 import './navbar.scss';
 import icon_house from '../../image/icons8-product.gif';
-import {Link, useNavigate} from "react-router-dom";
-import {useDispatch, useSelector} from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 import _ from 'lodash';
 import icon_user from '../../image/icons8-user-50.png';
-import {format} from "date-fns";
-import {changeLocationAccount} from "../../service/accountService";
-import {useEffect, useState} from "react";
-import {countUnreadMessagesByReceiverId} from "../../service/messageService";
-import {countUnreadMessage, editAccount, removeAccount} from "../../redux/reducer/accountSlice";
+import { format } from "date-fns";
+import { changeLocationAccount } from "../../service/accountService";
+import { useEffect, useState } from "react";
+import { countUnreadMessagesByReceiverId } from "../../service/messageService";
+import { countUnreadMessage, editAccount, removeAccount } from "../../redux/reducer/accountSlice";
 import Swal from "sweetalert2";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import {getAllSchedulesByAccountId} from "../../service/scheduleService";
+import { getAllSchedulesByAccountId } from "../../service/scheduleService";
 
 const Navbar = () => {
     const [keySearch, setKeySearch] = useState("");
     const [exchangeDays, setExchangeDays] = useState([]);
-    const {unreadMessage, unreadNotify, notifyList, account} = useSelector(state => state.myState);
+    const { unreadMessage, unreadNotify, notifyList, account } = useSelector(state => state.myState);
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
@@ -31,7 +31,7 @@ const Navbar = () => {
 
             getAllSchedulesByAccountId(account.id).then(response => {
                 const arr = response.data.map(item => {
-                    return {date: item.date, holidayName: `Trao đổi tại ${item.address}`}
+                    return { date: item.date, holidayName: `Trao đổi tại ${item.address}` }
                 })
                 setExchangeDays(arr);
             }).catch(error => {
@@ -96,30 +96,41 @@ const Navbar = () => {
         }
     }
 
+    const countExchangeDate = () =>{
+        let cnt = 0;
+        let today = new Date();
+        exchangeDays.forEach((item) => {
+            if(item.date > today){
+                ++cnt;
+            }
+        })
+        return cnt;
+    }
+
     return (
         <>
             <div className="container-fluid nav-bar py-2 sticky-top">
                 <nav className="navbar-light py-2 d-flex justify-content-between align-items-center">
                     <Link to={"/"} className="navbar-brand d-flex align-items-center text-center">
                         <div className="me-2">
-                            <img className="img-fluid" src={icon_house} alt="Icon"/>
+                            <img className="img-fluid" src={icon_house} alt="Icon" />
                         </div>
                         <h2 className='brand-name'>WDYT</h2>
                     </Link>
-                    <div style={{width: '30%'}}>
+                    <div style={{ width: '30%' }}>
                         <div className="d-flex justify-content-center align-items-center">
                             <input type="text" className="form-control py-2"
-                                   placeholder="Nhập từ khóa tìm kiếm" value={keySearch}
-                                   onChange={event => setKeySearch(event.target.value)}
-                                   onKeyDown={pressEnterToSearch}/>
+                                placeholder="Nhập từ khóa tìm kiếm" value={keySearch}
+                                onChange={event => setKeySearch(event.target.value)}
+                                onKeyDown={pressEnterToSearch} />
                             <button className="btn border-secondary ms-2"
-                                    onClick={handleSearch}>
+                                onClick={handleSearch}>
                                 <i className="fa-solid fa-search"></i>
                             </button>
                         </div>
                     </div>
                     <button className="btn border-secondary"
-                            onClick={handleSearchAroundHere}>
+                        onClick={handleSearchAroundHere}>
                         <i className="fa-solid fa-location-crosshairs me-2"></i>
                         Tìm kiếm quanh đây
                     </button>
@@ -132,11 +143,11 @@ const Navbar = () => {
                             <div className="d-flex align-items-center">
                                 <div className="nav-item dropdown">
                                     <button className="dropdown-toggle nav-link d-flex align-items-center"
-                                            data-bs-toggle="dropdown"
-                                            aria-expanded="false">
+                                        data-bs-toggle="dropdown"
+                                        aria-expanded="false">
                                         <img className="img-thumbnail rounded-circle me-2"
-                                             src={account.avatar ? account.avatar : icon_user} alt=""
-                                             width={40} style={{height: '40px'}}/>
+                                            src={account.avatar ? account.avatar : icon_user} alt=""
+                                            width={40} style={{ height: '40px' }} />
                                         {account.name ? account.name : ''}
                                     </button>
 
@@ -160,25 +171,28 @@ const Navbar = () => {
                                         {unreadMessage ?
                                             <sup
                                                 className="badge text-white bg-danger position-absolute top-0 start-50"
-                                                style={{fontSize: '10px'}}>
+                                                style={{ fontSize: '10px' }}>
                                                 {unreadMessage > 5 ? '5+' : unreadMessage}
                                             </sup>
                                             :
                                             null
                                         }
-                                        <span className='label'>Tin nhắn</span>
+                                        {/* <span className='label'>Tin nhắn</span> */}
                                     </Link>
                                 </div>
 
 
                                 <div className="nav-item ms-2 position-relative">
                                     <label className="nav-link"
-                                           htmlFor={`${!_.isEmpty(exchangeDays) ? 'date-exchange' : 'date'}`}>
+                                        htmlFor={`${!_.isEmpty(exchangeDays) ? 'date-exchange' : 'date'}`}>
                                         <i className="fa-regular fa-calendar-check"></i>
-                                        {/* <span className="badge icon-calender position-absolute top-0">
-                                            {exchangeDays.length}
-                                        </span> */}
-                                        <span className='label'>Lịch</span>
+                                        {countExchangeDate() != 0 &&
+                                            <span className="badge icon-calender position-absolute top-0">
+                                                {exchangeDays.length}
+                                            </span>
+                                        }
+
+                                        {/* <span className='label'>Lịch</span> */}
                                     </label>
                                 </div>
                                 {!_.isEmpty(exchangeDays) &&
@@ -189,7 +203,7 @@ const Navbar = () => {
                                         className="d-none"
                                     />
                                 }
-                                { _.isEmpty(exchangeDays) &&
+                                {_.isEmpty(exchangeDays) &&
                                     <DatePicker
                                         minDate={new Date()}
                                         id="date"

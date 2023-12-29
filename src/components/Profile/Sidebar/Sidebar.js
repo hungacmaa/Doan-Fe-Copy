@@ -45,13 +45,13 @@ const Sidebar = () => {
                                             <span className="hide-menu">Quản lý các bài đăng của bạn</span>
                                         </NavLink>
                                     </li>
-                                    <li className="px-3 py-2">
+                                    {/* <li className="px-3 py-2">
                                         <NavLink to="/account/manage-iso-user"
                                                  className={({isActive}) => isActive ? "nav-link active" : "nav-link"}>
                                             <i className="fa-solid fa-rectangle-list me-3"></i>
                                             <span className="hide-menu">Quản lý các món hàng bạn tìm kiếm</span>
                                         </NavLink>
-                                    </li>
+                                    </li> */}
                                     </>
                                     :
                                     account.role?.name === 'ROLE_ADMIN' ?
@@ -59,7 +59,7 @@ const Sidebar = () => {
                                             <li className="px-3 py-2">
                                                 <NavLink to="/account/manage-posts-admin"
                                                          className={({isActive}) => isActive ? "nav-link active" : "nav-link"}>
-                                                    <i className="fa-solid fa-rectangle-list me-3"></i>
+                                                    <i class="fa-solid fa-signs-post me-3"></i>
                                                     <span className="hide-menu">Quản lý các bài đăng</span>
                                                 </NavLink>
                                             </li>
@@ -69,6 +69,30 @@ const Sidebar = () => {
                                                          className={({isActive}) => isActive ? "nav-link active" : "nav-link"}>
                                                     <i className="fa-solid fa-address-card me-3"></i>
                                                     <span className="hide-menu">Quản lý các người dùng</span>
+                                                </NavLink>
+                                            </li>
+
+                                            <li className="px-3 py-2">
+                                                <NavLink to="/account/manage-product-category"
+                                                         className={({isActive}) => isActive ? "nav-link active" : "nav-link"}>
+                                                    <i class="fa-solid fa-list me-3"></i>
+                                                    <span className="hide-menu">Quản lý thể loại sản phẩm</span>
+                                                </NavLink>
+                                            </li>
+
+                                            <li className="px-3 py-2">
+                                                <NavLink to="/account/manage-censors"
+                                                         className={({isActive}) => isActive ? "nav-link active" : "nav-link"}>
+                                                    <i class="fa-solid fa-list-check me-3"></i>
+                                                    <span className="hide-menu">Kiểm duyệt</span>
+                                                </NavLink>
+                                            </li>
+
+                                            <li className="px-3 py-2">
+                                                <NavLink to="/account/manage-statistics"
+                                                         className={({isActive}) => isActive ? "nav-link active" : "nav-link"}>
+                                                    <i class="fa-solid fa-chart-simple me-3"></i>
+                                                    <span className="hide-menu">Thống kê</span>
                                                 </NavLink>
                                             </li>
                                         </>
