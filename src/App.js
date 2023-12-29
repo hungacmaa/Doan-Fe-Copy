@@ -24,6 +24,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {changeLocationAccount, getAccountById} from "./service/accountService";
 import {editAccount, removeAccount} from "./redux/reducer/accountSlice";
 import SearchAroundHere from "./components/SearchAroundHere/SearchAroundHere";
+import CensorList from './components/Profile/CensorList/CensorList';
 
 export const LocationContext = createContext(null)
 
@@ -76,6 +77,9 @@ function App() {
                     <Route path="manage-posts-user" element={<PostListByAccount/>}/>
                     <Route path="manage-posts-admin" element={<PostList/>}/>
                     <Route path="manage-users" element={<UserList/>}/>
+                    <Route path="manage-product-category" element={<UserList/>}/>
+                    <Route path="manage-censors" element={<CensorList/>}/>
+                    <Route path="manage-statistics" element={<UserList/>}/>
                 </Route>
             </Routes>
             <Footer/>

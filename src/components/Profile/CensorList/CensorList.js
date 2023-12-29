@@ -4,45 +4,24 @@ import { Table } from "reactstrap";
 import { Pagination } from "@mui/material";
 import Swal from "sweetalert2";
 import { Button, Modal } from "react-bootstrap";
-import { Link } from "react-router-dom";
-import { blockAccount, getAllAccounts, unBlockAccount } from "../../../service/adminService";
+import { Link, useNavigate } from "react-router-dom";
 import image_user from '../../../image/user-image.png';
 import { getAllPostsByAccountId } from "../../../service/accountService";
 import { WebSocketContext } from "../../WebSocket/WebSocketProvider";
+import { acceptCensor, getAllCensor, rejectCensor } from '../../../service/censorService';
+import { useSelector } from 'react-redux';
 
-const UserList = () => {
-    const [users, setUsers] = useState([]);
+const CensorList = () => {
     const [totalPages, setTotalPages] = useState(0);
     const [currentPage, setCurrentPage] = useState(1);
-    const [posts, setPosts] = useState([]);
     const [totalPagesModal, setTotalPagesModal] = useState(0);
     const [currentPageModal, setCurrentPageModal] = useState(1);
     const [nameSearch, setNameSearch] = useState("");
-    const [user, setUser] = useState({});
     const [showModal, setShowModal] = useState(false);
     const { sendNotify } = useContext(WebSocketContext);
     const [status, setStatus] = useState("");
     const [render, setRender] = useState(false);
 
-    useEffect(() => {
-        getAllAccounts(status, nameSearch, currentPage - 1).then(response => {
-            setUsers(response.data.content);
-            setTotalPages(response.data.totalPages);
-        }).catch(error => console.log(error));
-        window.scrollTo({
-            top: 0,
-            behavior: "smooth"
-        })
-    }, [currentPage, nameSearch, status, render])
-
-    useEffect(() => {
-        if (user.id) {
-            getAllPostsByAccountId(user.id, currentPageModal - 1, 5, {}).then(response => {
-                setPosts(response.data.content);
-                setTotalPagesModal(response.data.totalPages);
-            }).catch(error => console.log(error));
-        }
-    }, [user, currentPageModal])
 
     const changePage = (e, value) => {
         setCurrentPage(value);
@@ -50,62 +29,6 @@ const UserList = () => {
 
     const changePageModal = (event, value) => {
         setCurrentPageModal(value);
-    }
-    const handleBlockAccount = (id) => {
-        Swal.fire({
-            title: 'Bạn chắc chắn muốn khóa tài khoản này?',
-            icon: 'question',
-            showCancelButton: true,
-            confirmButtonText: 'Xác nhận',
-            cancelButtonText: 'Đóng',
-        }).then((result) => {
-            if (result.isConfirmed) {
-                blockAccount(id).then(() => {
-                    setRender(!render);
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Khóa tài khoản thành công !',
-                        showConfirmButton: false,
-                        timer: 1000
-                    }).then();
-                    sendNotify({
-                        content: "Admin đã khóa tài khoản của bạn",
-                        receiver: { id }
-                    });
-                }).catch(error => {
-                    console.log(error);
-                });
-            }
-        })
-    }
-    const handleUnBlockAccount = (id) => {
-        Swal.fire({
-            title: 'Bạn chắc chắn muốn mở khóa tài khoản này?',
-            icon: 'question',
-            showCancelButton: true,
-            confirmButtonText: 'Xác nhận',
-            cancelButtonText: 'Đóng',
-        }).then((result) => {
-            if (result.isConfirmed) {
-                unBlockAccount(id).then(() => {
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Mở khóa tài khoản thành công !',
-                        showConfirmButton: false,
-                        timer: 1000
-                    }).then();
-                    setRender(!render);
-                }).catch(error => {
-                    console.log(error);
-                });
-            }
-        })
-    }
-
-    const showUserDetail = (user) => {
-        setUser({ ...user });
-        setCurrentPageModal(1);
-        setShowModal(true);
     }
 
     const handleChangeStatus = (event) => {
@@ -118,14 +41,123 @@ const UserList = () => {
         setCurrentPage(1);
     }
 
+    const { account } = useSelector(state => state.myState);
+
+    const [censors, setCensors] = useState([]);
+
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        getAllCensor().then(response => {
+            setCensors(response.data);
+        }).catch(error => console.log(error));
+        window.scrollTo({
+            top: 0,
+            behavior: "smooth"
+        })
+    }, [render])
+
+    const showPostDetail = (censor) => {
+        navigate(`/posts/${censor.post.id}`);
+    }
+
+    const acceptCensor1 = (censor) => {
+        acceptCensor(censor.id, "Thỏa mãn", account).then(response => {
+            console.log(response);
+            Swal.fire({
+                icon: 'success',
+                title: 'Duyệt thành công!',
+                showConfirmButton: false,
+                timer: 1500
+            }).then();
+
+        }
+        )
+            .catch((error) => {
+                console.log(error);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Duyệt thất bại!',
+                    showConfirmButton: false,
+                    timer: 1500
+                }).then();
+            });
+        setRender(!render);
+    }
+
+    const rejectCensor1 = (censor) => {
+        Swal.fire({
+            title: 'Nhập lý do khóa',
+            input: 'text',
+            inputAttributes: {
+                autocapitalize: 'off'
+            },
+            showCancelButton: true,
+            cancelButtonText: 'Đóng',
+            confirmButtonText: 'Gửi',
+            preConfirm: (value) => {
+                if (!value) {
+                    Swal.showValidationMessage('Vui lòng không để trống')
+                }
+            }
+        }).then((rs) => {
+            if (rs.isConfirmed) {
+                rejectCensor(censor.id, rs.value, account).then(response => {
+                    console.log(response);
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Khóa bài đăng thành công!',
+                        showConfirmButton: false,
+                        timer: 1500
+                    }).then();
+                }
+                )
+                    .catch((error) => {
+                        console.log(error);
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Khóa thất bại!',
+                            showConfirmButton: false,
+                            timer: 1500
+                        }).then();
+                    });
+            }
+        })
+        setRender(!render);
+
+    }
 
     return (
         <div className="col-9">
-            <h3 className="text-uppercase text-center mb-5 mt-3">Danh sách người dùng</h3>
+            <h3 className="text-uppercase text-center mb-5 mt-3">Danh sách kiểm duyệt</h3>
             <div className="mb-3 py-4 px-3"
                 style={{ backgroundColor: "rgb(220,219,219)" }}>
                 <div className={'row g-2'}>
                     <div className="col-md-4">
+                        <label className="form-label fw-medium">Tìm kiếm theo tên bài đăng</label>
+                        <input type="text" className="form-control border-0 py-2"
+                            placeholder="Nhập từ khóa tìm kiếm"
+                            value={nameSearch}
+                            onChange={handleChangeNameSearch} />
+                    </div>
+                    <div className="col-md-4">
+                        <label className="form-label fw-medium">Trạng thái</label>
+                        <select className="form-select py-2 border-0"
+                            onChange={handleChangeStatus}>
+                            <option value="">Tất cả</option>
+                            <option value="Chưa kiểm duyệt">Chưa kiểm duyệt</option>
+                            <option value="Đã Kiểm duyệt">Đã Kiểm duyệt</option>
+                        </select>
+                    </div>
+                    <div className="col-md-4">
+                        <label className="form-label fw-medium">Sắp xếp theo</label>
+                        <select className="form-select py-2 border-0"
+                            onChange={handleChangeStatus}>
+                            <option value="Newest">Mới nhất</option>
+                            <option value="Oldest">Cũ nhất</option>
+                        </select>
+                    </div>
+                    {/* <div className="col-md-4">
                         <label className="form-label fw-medium">Trạng thái</label>
                         <select className="form-select py-2 border-0"
                             onChange={handleChangeStatus}>
@@ -133,54 +165,91 @@ const UserList = () => {
                             <option value="Đang hoạt động">Đang hoạt động</option>
                             <option value="Bị khóa">Bị khóa</option>
                         </select>
-                    </div>
-                    <div className="col-md-8">
+                    </div> */}
+                    {/* <div className="col-md-8">
                         <label className="form-label fw-medium">Tìm kiếm theo tên đăng nhập</label>
                         <input type="text" className="form-control border-0 py-2"
                             placeholder="Nhập từ khóa tìm kiếm"
                             value={nameSearch}
                             onChange={handleChangeNameSearch} />
-                    </div>
+                    </div> */}
                 </div>
             </div>
             <Table hover>
                 <thead>
                     <tr align="center">
                         <th>STT</th>
-                        <th>Tên</th>
-                        <th>Vai trò</th>
+                        <th>Tên bài đăng</th>
+                        <th>Ngày tạo</th>
+                        <th>Ngày kiểm duyệt</th>
+                        <th>Người kiểm duyệt</th>
                         <th>Trạng thái</th>
                         <th>Hành động</th>
                     </tr>
                 </thead>
                 <tbody style={{ verticalAlign: 'middle' }}>
-                    {!_.isEmpty(users) ?
-                        users.map((item, index) => (
+                    {!_.isEmpty(censors) ?
+                        censors.map((item, index) => (
                             <tr key={item.id} align="center">
                                 <td>{index + 1}</td>
-                                <td><img src={item.avatar} style={{
+                                <td><img src={item.post.avatar} style={{
                                     width: '36px',
                                     height: '36px',
                                     borderRadius: '50%',
                                     marginRight: '16px'
-                                }}></img>{item.name}</td>
-                                <td>{item.role.name === "ROLE_ADMIN" ? "Admin" : "Người dùng"}</td>
+                                }}></img>{item.post.title}</td>
+                                <td>{item.createdAt}</td>
+                                <td>{item.modifiedAt != null ? item.modifiedAt : "Chưa duyệt"}</td>
+                                <td>{item.reviewer != null ? item.reviewer.name : "Chưa duyệt"}</td>
                                 <td>{item.status}</td>
                                 <td className="d-flex justify-content-center">
                                     <button
                                         onClick={() => {
-                                            showUserDetail(item)
+                                            acceptCensor1(item)
+                                        }}
+                                        className="btn border border-success text-success me-3"
+                                        style={{ width: '100px' }}
+                                        disabled={item.status === "Chờ kiểm duyệt" ? false : true}
+                                    >
+                                        Duyệt
+                                    </button>
+                                    <button
+                                        onClick={() => {
+                                            rejectCensor1(item)
+                                        }}
+                                        className="btn border border-danger text-danger me-3"
+                                        style={{ width: '100px' }}
+                                        disabled={item.status === "Chờ kiểm duyệt" ? false : true}
+                                    >
+                                        Khóa
+                                    </button>
+                                    <button
+                                        onClick={() => {
+                                            showPostDetail(item)
                                         }}
                                         className="btn border border-primary text-primary me-3"
+                                        style={{ width: '100px' }}
                                     >
                                         Chi tiết
                                     </button>
+                                    {/* {item.status === "Bị khóa" && item.role.name === "ROLE_USER" ?
                                     <button
-                                        onClick={() => handleBlockAccount(item.id)}
+                                        onClick={() => handleUnBlockAccount(item.id)}
                                         className="btn border border-danger text-danger"
-                                        style={{ width: '100px' }}>
-                                        Khóa
+                                        style={{width: '100px'}}>
+                                        Mở khóa
                                     </button>
+                                    :
+                                    item.role.name === "ROLE_USER" ?
+                                        <button
+                                            onClick={() => handleBlockAccount(item.id)}
+                                            className="btn border border-secondary text-secondary"
+                                            style={{width: '100px'}}>
+                                            Khóa
+                                        </button>
+                                        :
+                                        null
+                                } */}
                                 </td>
                             </tr>
                         ))
@@ -190,7 +259,7 @@ const UserList = () => {
                         </tr>
                     }
                 </tbody>
-                <Modal
+                {/* <Modal
                     size="xl"
                     show={showModal}
                     onHide={() => setShowModal(false)}
@@ -222,8 +291,8 @@ const UserList = () => {
                                             <td>{user.address}</td>
                                         </tr>
                                         <tr>
-                                            <th>Số điện thoại:</th>
-                                            <td>{user.phone}</td>
+                                            <th>Mật khẩu:</th>
+                                            <td>{user.password}</td>
                                         </tr>
                                         <tr>
                                             <th>Trạng thái:</th>
@@ -288,7 +357,7 @@ const UserList = () => {
                             Đóng
                         </Button>
                     </Modal.Footer>
-                </Modal>
+                </Modal> */}
             </Table>
             {totalPages > 0 ?
                 <div className="col-12 mt-5 d-flex justify-content-center">
@@ -302,4 +371,4 @@ const UserList = () => {
     );
 };
 
-export default UserList;
+export default CensorList;
