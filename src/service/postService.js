@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = "http://34.204.174.17:8080/api/posts"
+const API_URL = "http://3.225.221.144:8080/api/posts"
 const getAllPosts = (page = 0, size = 12, data) => {
     return axios.post(`${API_URL}?page=${page}&size=${size}`, data);
 }
