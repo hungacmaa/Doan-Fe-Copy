@@ -54,6 +54,19 @@ const searchAroundHere = (data) => {
     return instance.post(`${API_URL}/search-around-here`, data);
 }
 
+const reportPost = (data) => {
+    return instance.post(`${API_URL}/report-post`, data);
+}
+
+const getAllReportsByAccountId = (accountId, data, page = 0, size = 10) => {
+    return instance.post(`${API_URL}/report-post/${accountId}?page=${page}&size=${size}`, data);
+}
+
+const getReportPostId = (postId) => {
+    return instance.get(`${API_URL}/report-post/${postId}`);
+}
+
+
 
 export {
     getAllPostsByAccountId,
@@ -68,5 +81,8 @@ export {
     createPost,
     editPost,
     changeLocationAccount,
-    searchAroundHere
+    searchAroundHere,
+    reportPost,
+    getAllReportsByAccountId,
+    getReportPostId
 };

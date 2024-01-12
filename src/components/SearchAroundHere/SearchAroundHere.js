@@ -55,12 +55,12 @@ const SearchAroundHere = () => {
                                 users.map(user => {
                                     return (
                                         <div className="col-3" key={user.id}>
-                                            <div className="border rounded overflow-hidden">
+                                            <div className="overflow-hidden" style={{borderRadius: "50px", border: "3px solid grey"}}>
                                                 <Link to={`/profile-user/${user.id}`} className="nav-link">
                                                     <div className="position-relative overflow-hidden">
                                                         <div>
                                                             <img className="img-thumbnail" src={user.avatar} alt=""
-                                                                 style={{aspectRatio: '1/1'}}/>
+                                                                 style={{aspectRatio: '1/1', borderRadius: "50px"}}/>
                                                         </div>
                                                     </div>
                                                     <div className="pt-4 px-3">

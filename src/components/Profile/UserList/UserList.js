@@ -158,13 +158,30 @@ const UserList = () => {
                         users.map((item, index) => (
                             <tr key={item.id} align="center">
                                 <td>{index + 1}</td>
-                                <td><img src={item.avatar} style={{
-                                    width: '36px',
-                                    height: '36px',
-                                    borderRadius: '50%',
-                                    marginRight: '16px'
-                                }}></img>{item.name}</td>
-                                <td>{item.role.name === "ROLE_ADMIN" ? "Admin" : "Người dùng"}</td>
+                                <td>
+                                    {/* <img src={item.avatar} style={{
+                                        width: '36px',
+                                        height: '36px',
+                                        borderRadius: '50%',
+                                        marginRight: '16px'
+                                    }}></img>{item.name} */}
+
+                                    <div style={{ textAlign: "left" }}>
+                                        <Link to={`/profile-user/${item.id}`} className="nav-link fw-medium text-start" style={{ marginLeft: "16px" }}>
+                                            <img src={item.avatar} style={{
+                                                width: '36px',
+                                                height: '36px',
+                                                borderRadius: '50%',
+                                                marginRight: '16px',
+                                            }}></img>
+                                            {item.name}
+                                        </Link>
+                                    </div>
+
+                                </td>
+                                <td>
+                                    <div style={{ textAlign: "left" }}>{item.role.name === "ROLE_ADMIN" ? "Admin" : "Người dùng"}</div>
+                                </td>
                                 <td>{item.status}</td>
                                 <td className="d-flex justify-content-center">
                                     <button

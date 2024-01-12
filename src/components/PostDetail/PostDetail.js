@@ -8,7 +8,7 @@ import { getAllImagesByPostId } from "../../service/imageService";
 import { getPostById } from "../../service/postService";
 import { Pagination } from "@mui/material";
 import { useSelector } from "react-redux";
-import { getAllPostsByAccountId } from "../../service/accountService";
+import { getAllPostsByAccountId, getReportPostId, reportPost } from "../../service/accountService";
 import Swal from "sweetalert2";
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import { exchangeSchema } from "../../validate/validate";
@@ -88,6 +88,80 @@ const PostDetail = () => {
         setProduct({});
     }
 
+    const handleReport = (post) => {
+        if (!account.id) {
+            Swal.fire({
+                title: 'Vui lòng đăng nhập để báo cáo bài viết!',
+                icon: 'error',
+                showConfirmButton: true
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    navigate('/login');
+                }
+            })
+            return;
+        }
+
+        if (post.account.id === account.id) {
+            Swal.fire({
+                title: 'Bạn là chủ của bài đăng này !',
+                icon: 'error',
+                showConfirmButton: true
+            }).then();
+            return;
+        }
+
+        Swal.fire({
+            title: `Xác nhận báo cáo bài viết ?`,
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonText: 'Xác nhận',
+            cancelButtonText: 'Đóng',
+        }).then((result) => {
+            if (result.isConfirmed) {
+                Swal.fire({
+                    title: 'Nhập lý do báo cáo bài viết',
+                    input: 'text',
+                    inputAttributes: {
+                        autocapitalize: 'off'
+                    },
+                    showCancelButton: true,
+                    cancelButtonText: 'Đóng',
+                    confirmButtonText: 'Gửi',
+                    preConfirm: (value) => {
+                        if (!value) {
+                            Swal.showValidationMessage('Vui lòng không để trống')
+                        }
+                    }
+                }).then((rs) => {
+                    if (rs.isConfirmed) {
+                        const data = {
+                            reason: rs.value,
+                            post: post,
+                            account: { id: account.id }
+                        }
+                        reportPost(data).then(response => {
+                            Swal.fire({
+                                title: 'Báo cáo bài viết thành công !',
+                                icon: 'success',
+                                showConfirmButton: false,
+                                timer: 1500
+                            }).then();
+                        }).catch(error => {
+                            console.log(error);
+                            Swal.fire({
+                                title: 'Báo cáo bài viết thất bại !',
+                                icon: 'error',
+                                showConfirmButton: false,
+                                timer: 1500
+                            }).then();
+                        })
+                    }
+                })
+            }
+        })
+    }
+
     const handleChangeProduct = (values) => {
         if (_.isEmpty(product)) {
             Swal.fire({
@@ -134,44 +208,49 @@ const PostDetail = () => {
                     <div className="col-lg-5 ms-5 pb-5">
                         <h1 className="post-title">{post.title}</h1>
 
-                        <p className="mb-2 feature-item">
-                            <span className="fw-medium">Số lượt xem:</span> {post.countView}
-                        </p>
-
-                        <p className="mb-2 feature-item">
-                            <span className="fw-medium">Trạng thái:</span> {post.status}
-                        </p>
-
                         <Link to={`/profile-user/${post.account?.id}`} className="mb-2 nav-link feature-item">
-                            <span className="fw-medium">Người đăng:</span> <img src={post.account?.avatar} className='user-avatar'></img> <span className="fw-bold">{post.account?.name}</span>
+                            <span className="fw-medium post-label">Người đăng:</span><img src={post.account?.avatar} className='user-avatar'></img> <span className="fw-bold">{post.account?.name}</span>
                         </Link>
 
                         <p className="mb-2 feature-item">
-                            <span className="fw-medium">Ngày đăng bài:</span> {formatDate(post.createdAt)}
+                            <span className="fw-medium post-label">Ngày đăng bài:</span> {formatDate(post.createdAt)}
                         </p>
 
                         <p className="mb-2 feature-item">
-                            <span className="fw-medium">Địa chỉ:</span> {post.address}
+                            <span className="fw-medium post-label">Số lượt xem:</span> {post.countView}
                         </p>
 
                         <p className="mb-2 feature-item">
-                            <span className="fw-medium">Danh mục sản phẩm:</span> {post.categoryProduct?.name}
+                            <span className="fw-medium post-label">Trạng thái:</span> {post.status}
                         </p>
 
                         <p className="mb-2 feature-item">
-                            <span className="fw-medium">Danh mục bài viết:</span> {post.categoryPost}
+                            <span className="fw-medium post-label">Danh mục sản phẩm:</span> {post.categoryProduct?.name}
+                        </p>
+
+                        <p className="mb-2 feature-item">
+                            <span className="fw-medium post-label">Danh mục bài viết:</span> {post.categoryPost}
+                        </p>
+
+                        <p className="mb-2 feature-item">
+                            <span className="fw-medium post-label">Địa chỉ:</span> {post.address}
                         </p>
 
                         <p className="mb-2 feature-item">
                             <div className='row'>
-                                <span className="fw-medium col-2">Mô tả:</span> <p className="info-box col-8">{post.description}</p>
+                                <span className="fw-medium col-2">Mô tả:</span>
                             </div>
-
+                            <div className='row'>
+                                <p className="info-box col-9">{post.description}</p>
+                            </div>
                         </p>
 
                         <p className="mb-2 feature-item">
                             <div className='row'>
-                                <span className="fw-medium col-2">Yêu cầu:</span> <p className="info-box col-8">{post.requirement}</p>
+                                <span className="fw-medium col-2">Yêu cầu:</span>
+                            </div>
+                            <div className='row'>
+                                <p className="info-box col-9">{post.requirement}</p>
                             </div>
 
                         </p>
@@ -189,6 +268,13 @@ const PostDetail = () => {
                                 </Link>
                                 :
                                 null
+                        }
+
+                        {post.status !== 'Vô hiệu hóa' &&
+                            <button className="btn btn-danger btn-lg mt-3 ms-3"
+                                onClick={() => handleReport(post)}>
+                                <i className="fa-solid fa-shield-virus me-2"></i>Báo cáo bài viết
+                            </button>
                         }
                     </div>
                 }

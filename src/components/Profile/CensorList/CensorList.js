@@ -192,12 +192,25 @@ const CensorList = () => {
                         censors.map((item, index) => (
                             <tr key={item.id} align="center">
                                 <td>{index + 1}</td>
-                                <td><img src={item.post.avatar} style={{
-                                    width: '36px',
-                                    height: '36px',
-                                    borderRadius: '50%',
-                                    marginRight: '16px'
-                                }}></img>{item.post.title}</td>
+                                <td>
+                                    {/* <img src={item.post.avatar} style={{
+                                        width: '36px',
+                                        height: '36px',
+                                        borderRadius: '50%',
+                                        marginRight: '16px'
+                                    }}></img>{item.post.title} */}
+
+                                    <div style={{ textAlign: "left", paddingLeft: "20px" }}>
+                                        <Link to={`/posts/${item.post.id}`} className="nav-link fw-medium text-start" style={{ marginLeft: "16px" }}>
+                                            <img src={item.post.avatar} style={{
+                                                width: '36px',
+                                                height: '36px',
+                                                borderRadius: '50%',
+                                                marginRight: '16px',
+                                            }}></img>
+                                            {item.post.title}
+                                        </Link>
+                                    </div></td>
                                 <td>{item.createdAt}</td>
                                 <td>{item.modifiedAt != null ? item.modifiedAt : "Chưa duyệt"}</td>
                                 <td>{item.reviewer != null ? item.reviewer.name : "Chưa duyệt"}</td>

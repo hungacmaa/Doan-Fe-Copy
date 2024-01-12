@@ -27,6 +27,7 @@ import SearchAroundHere from "./components/SearchAroundHere/SearchAroundHere";
 import CensorList from './components/Profile/CensorList/CensorList';
 import CategoryProductList from './components/Profile/CategoryPoductList/CategoryProductList';
 import StatisticPage from './components/Profile/Statistic/Statistic';
+import ReportHistory from './components/Profile/ReportHistory/ReportHistory';
 
 export const LocationContext = createContext(null)
 
@@ -82,6 +83,7 @@ function App() {
                     <Route path="manage-product-category" element={<CategoryProductList/>}/>
                     <Route path="manage-censors" element={<CensorList/>}/>
                     <Route path="manage-statistics" element={<StatisticPage/>}/>
+                    <Route path="report-history" element={<ReportHistory/>}/>
                 </Route>
             </Routes>
             <Footer/>

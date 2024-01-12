@@ -138,16 +138,43 @@ const PostList = () => {
                             <tr key={item.id} align="center">
                                 <td>{index + 1}</td>
                                 <td>
-                                    <Link to={`/posts/${item.id}`} className="nav-link fw-medium">
+                                    {/* <Link to={`/posts/${item.id}`} className="nav-link fw-medium">
                                         <img src={item.avatar} style={{
                                             width: '36px',
                                             height: '36px',
                                             borderRadius: '50%',
                                             marginRight: '16px'
                                         }}></img>{item.title}
-                                    </Link>
+                                    </Link> */}
+
+                                    <div style={{ paddingLeft: "80px", textAlign: "left" }}>
+
+                                        <Link to={`/posts/${item.id}`} className="nav-link fw-medium text-start">
+                                            <img src={item.avatar} style={{
+                                                width: '36px',
+                                                height: '36px',
+                                                borderRadius: '50%',
+                                                marginRight: '16px'
+                                            }}></img>
+                                            {item.title}
+                                        </Link>
+                                    </div>
                                 </td>
-                                <td>{item.account.username}</td>
+                                <td>
+
+                                    <div style={{ paddingLeft: "80px", textAlign: "left" }}>
+
+                                        <Link to={`/profile-user/${item.account.id}`} className="nav-link fw-medium text-start">
+                                            <img src={item.account.avatar} style={{
+                                                width: '36px',
+                                                height: '36px',
+                                                borderRadius: '50%',
+                                                marginRight: '16px'
+                                            }}></img>
+                                            {item.account.username}
+                                        </Link>
+                                    </div>
+                                </td>
                                 <td>{formatDate(item.createdAt)}</td>
                                 <td>{item.status}</td>
                                 <td className="d-flex justify-content-center">
