@@ -1,18 +1,18 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import _ from "lodash";
-import {Pagination} from "@mui/material";
-import {formatDate} from "../../../service/format";
-import {Button, Modal} from "react-bootstrap";
-import {useSelector} from "react-redux";
-import {getAllExchangesByAccountId} from "../../../service/accountService";
-import {createSchedule, getScheduleByExchangeId} from "../../../service/scheduleService";
-import DatePicker, {registerLocale} from "react-datepicker";
+import { Pagination } from "@mui/material";
+import { formatDate } from "../../../service/format";
+import { Button, Modal } from "react-bootstrap";
+import { useSelector } from "react-redux";
+import { getAllExchangesByAccountId } from "../../../service/accountService";
+import { createSchedule, getScheduleByExchangeId } from "../../../service/scheduleService";
+import DatePicker, { registerLocale } from "react-datepicker";
 import Swal from "sweetalert2";
 import vi from "date-fns/locale/vi";
 import "react-datepicker/dist/react-datepicker.css";
-import {format} from "date-fns";
-import {confirmExchange, denyExchange} from "../../../service/exchangeService";
-import {Link} from "react-router-dom";
+import { format } from "date-fns";
+import { confirmExchange, denyExchange } from "../../../service/exchangeService";
+import { Link } from "react-router-dom";
 
 registerLocale("vi", vi);
 const ExchangeHistory = () => {
@@ -36,14 +36,14 @@ const ExchangeHistory = () => {
     const account = useSelector(state => state.myState.account);
 
     useEffect(() => {
-        const data = {status, postSell, postBuy, startDate, endDate};
+        const data = { status, postSell, postBuy, startDate, endDate };
         getAllExchangesByAccountId(account.id, currentPage - 1, 10, data)
             .then(response => {
                 setExchanges(response.data.content);
                 setTotalPages(response.data.totalPages);
             }).catch(error => {
-            console.log(error);
-        })
+                console.log(error);
+            })
     }, [status, postSell, postBuy, startDate, endDate, currentPage, account, render])
 
     useEffect(() => {
@@ -116,7 +116,7 @@ const ExchangeHistory = () => {
         const data = {
             date: format(new Date(exchangeDate), "yyyy-MM-dd"),
             address,
-            exchange: {id: exchange.id}
+            exchange: { id: exchange.id }
         }
         createSchedule(data).then(response => {
             Swal.fire({
@@ -249,14 +249,14 @@ const ExchangeHistory = () => {
 
     return (
         <div className="col-12 col-lg-9">
-            <div className="container" style={{minHeight: '600px'}}>
+            <div className="container" style={{ minHeight: '600px' }}>
                 <h3 className="text-uppercase text-center mb-5 mt-3">Lịch sử trao đổi sản phẩm</h3>
                 <div className="mb-3 py-4 px-3 bg-gray row gx-2"
-                     style={{backgroundColor: "rgb(220,219,219)"}}>
+                    style={{ backgroundColor: "rgb(220,219,219)" }}>
                     <div className="col-md-2">
                         <div className="text-center mb-2 fw-medium">Trạng thái</div>
                         <select className="form-select py-2 border-0"
-                                onChange={handleChangeStatus}>
+                            onChange={handleChangeStatus}>
                             <option value="">Tất cả</option>
                             <option value="Chờ xác nhận">Chờ xác nhận</option>
                             <option value="Chờ trao đổi">Chờ trao đổi</option>
@@ -268,68 +268,97 @@ const ExchangeHistory = () => {
                     <div className="col-md-3">
                         <div className="text-center mb-2 fw-medium">Sản phẩm bạn muốn đổi</div>
                         <input type="text" className="form-control border-0 py-2"
-                               placeholder="Nhập từ khóa tìm kiếm"
-                               onChange={handleChangePostSell}/>
+                            placeholder="Nhập từ khóa tìm kiếm"
+                            onChange={handleChangePostSell} />
                     </div>
 
                     <div className="col-md-3">
                         <div className="text-center mb-2 fw-medium">Sản phẩm của bạn</div>
                         <input type="text" className="form-control border-0 py-2"
-                               placeholder="Nhập từ khóa tìm kiếm"
-                               onChange={handleChangePostBuy}/>
+                            placeholder="Nhập từ khóa tìm kiếm"
+                            onChange={handleChangePostBuy} />
                     </div>
 
                     <div className="col-2">
                         <div className="text-center mb-2 fw-medium">Ngày bắt đầu</div>
                         <input type="date" className="form-control border-0 py-2"
-                               onChange={handleChangeStartDate}/>
+                            onChange={handleChangeStartDate} />
                     </div>
                     <div className="col-2">
                         <div className="text-center mb-2 fw-medium">Ngày kết thúc</div>
                         <input type="date" className="form-control border-0 py-2"
-                               onChange={handleChangeEndDate}/>
+                            onChange={handleChangeEndDate} />
                     </div>
                 </div>
 
                 <table className="table">
                     <thead>
-                    <tr align="center" style={{fontSize: '18px'}}>
-                        <th>STT</th>
-                        <th>Sản phẩm bạn muốn đổi</th>
-                        <th>Ngày tạo yêu cầu</th>
-                        <th>Sản phẩm của bạn</th>
-                        <th>Trạng thái</th>
-                        <th>Hành động</th>
-                    </tr>
+                        <tr align="center" style={{ fontSize: '18px' }}>
+                            <th>STT</th>
+                            <th>Sản phẩm của bạn</th>
+                            <th>Ngày tạo yêu cầu</th>
+                            <th>Sản phẩm của đối phương</th>
+                            <th>Trạng thái</th>
+                            <th>Hành động</th>
+                        </tr>
                     </thead>
-                    <tbody style={{verticalAlign: 'middle'}}>
-                    {!_.isEmpty(exchanges) ? exchanges.map((item, index) => {
+                    <tbody style={{ verticalAlign: 'middle' }}>
+                        {!_.isEmpty(exchanges) ? exchanges.map((item, index) => {
                             return (
                                 <tr key={item.id} align="center">
                                     <td>
                                         <h6 className="m-0">{index + 1}</h6>
                                     </td>
                                     <td>
-                                        <Link to={`/posts/${item.postSell.id}`} className="nav-link">
-                                            {item.postSell.title}
-                                        </Link>
+                                        {
+                                            item.postSell.account.id == account.id ?
+                                                (<div style={{ paddingLeft: "40px", textAlign: "left" }}>
+
+                                                    <Link to={`/posts/${item.postSell.id}`} className="nav-link fw-medium text-start">
+                                                        <img src={item.postSell.avatar} style={{ width: "80px", height: "80px", marginRight: "1rem" }}></img>
+                                                        {item.postSell.title}
+                                                    </Link>
+                                                </div>) : (<div style={{ paddingLeft: "40px", textAlign: "left" }}>
+
+                                                    <Link to={`/posts/${item.postBuy.id}`} className="nav-link fw-medium text-start">
+                                                        <img src={item.postBuy.avatar} style={{ width: "80px", height: "80px", marginRight: "1rem" }}></img>
+                                                        {item.postSell.title}
+                                                    </Link>
+                                                </div>)
+                                        }
+
+
                                     </td>
                                     <td>{formatDate(item.createdAt)}</td>
                                     <td>
-                                        <Link to={`/posts/${item.postBuy.id}`} className="nav-link">
-                                            {item.postBuy.title}
-                                        </Link>
+                                        {
+                                            item.postSell.account.id != account.id ?
+                                                (<div style={{ paddingLeft: "40px", textAlign: "left" }}>
+
+                                                    <Link to={`/posts/${item.postSell.id}`} className="nav-link fw-medium text-start">
+                                                        <img src={item.postSell.avatar} style={{ width: "80px", height: "80px", marginRight: "1rem" }}></img>
+                                                        {item.postSell.title}
+                                                    </Link>
+                                                </div>) : (<div style={{ paddingLeft: "40px", textAlign: "left" }}>
+
+                                                    <Link to={`/posts/${item.postBuy.id}`} className="nav-link fw-medium text-start">
+                                                        <img src={item.postBuy.avatar} style={{ width: "80px", height: "80px", marginRight: "1rem" }}></img>
+                                                        {item.postSell.title}
+                                                    </Link>
+                                                </div>)
+                                        }
+
                                     </td>
                                     <td>{item.status}</td>
                                     <td>
                                         {item.postSell.account.id === account.id && item.status === 'Chờ xác nhận' ?
                                             <>
                                                 <button className="btn border-success text-success me-2"
-                                                        onClick={() => handleShowModalConfirm(item)}>
+                                                    onClick={() => handleShowModalConfirm(item)}>
                                                     Xác nhận
                                                 </button>
                                                 <button className="btn border-danger text-danger me-2"
-                                                        onClick={() => handleDeny(item)}>
+                                                    onClick={() => handleDeny(item)}>
                                                     Từ chối
                                                 </button>
                                             </>
@@ -337,11 +366,11 @@ const ExchangeHistory = () => {
                                             item.postSell.account.id === account.id && item.status === 'Chờ trao đổi' ?
                                                 <>
                                                     <button className="btn border-success text-success me-2"
-                                                            onClick={() => handleSuccess(item)}>
+                                                        onClick={() => handleSuccess(item)}>
                                                         Thành công
                                                     </button>
                                                     <button className="btn border-danger text-danger me-2"
-                                                            onClick={() => handleFail(item)}>
+                                                        onClick={() => handleFail(item)}>
                                                         Thất bại
                                                     </button>
                                                 </>
@@ -349,18 +378,18 @@ const ExchangeHistory = () => {
                                                 null
                                         }
                                         <button className="btn border-primary text-primary"
-                                                onClick={() => handleExchangeDetail(item)}>
+                                            onClick={() => handleExchangeDetail(item)}>
                                             Chi tiết
                                         </button>
                                     </td>
                                 </tr>
                             )
                         })
-                        :
-                        <tr align="center">
-                            <td colSpan="6" className="pt-3 fs-5 text-danger">Danh sách trống</td>
-                        </tr>
-                    }
+                            :
+                            <tr align="center">
+                                <td colSpan="6" className="pt-3 fs-5 text-danger">Danh sách trống</td>
+                            </tr>
+                        }
                     </tbody>
                 </table>
             </div>
@@ -368,7 +397,7 @@ const ExchangeHistory = () => {
                 {totalPages > 0 ?
                     <div className="col-12 mt-5 d-flex justify-content-center">
                         <Pagination count={totalPages} size="large" variant="outlined" shape="rounded"
-                                    onChange={changePage} color="primary"/>
+                            onChange={changePage} color="primary" />
                     </div>
                     :
                     null
@@ -390,7 +419,7 @@ const ExchangeHistory = () => {
                                     <div className="col-12 text-center fs-5 fw-medium mb-3">Thông tin sản phẩm bán</div>
                                     <div className="col-4">
                                         <img src={exchange.postSell.avatar} alt="" className="img-thumbnail"
-                                             style={{aspectRatio: '1/1'}}/>
+                                            style={{ aspectRatio: '1/1' }} />
                                     </div>
                                     <div className="col-8">
                                         <p className="mb-1">
@@ -412,7 +441,7 @@ const ExchangeHistory = () => {
                                     <div className="col-12 text-center fs-5 fw-medium mb-3">Thông tin sản phẩm mua</div>
                                     <div className="col-4">
                                         <img src={exchange.postBuy.avatar} alt="" className="img-thumbnail"
-                                             style={{aspectRatio: '1/1'}}/>
+                                            style={{ aspectRatio: '1/1' }} />
                                     </div>
                                     <div className="col-8">
                                         <p className="mb-1">
@@ -469,7 +498,7 @@ const ExchangeHistory = () => {
             }
 
             <Modal show={showModalConfirm} size="md"
-                   onHide={() => setShowModalConfirm(false)}>
+                onHide={() => setShowModalConfirm(false)}>
                 <Modal.Header closeButton>
                     <h3 className="text-center text-house">Xác nhận lịch trao đổi</h3>
                 </Modal.Header>
@@ -496,19 +525,19 @@ const ExchangeHistory = () => {
                                 <i className="fa-solid fa-location-dot me-2"></i>Địa chỉ trao đổi
                             </label>
                             <textarea id="address" className="form-control" name="address"
-                                      placeholder="Nhập địa chỉ trao đổi"
-                                      onChange={handleChangeAddress}/>
+                                placeholder="Nhập địa chỉ trao đổi"
+                                onChange={handleChangeAddress} />
                             <span className="text-danger">{addressError}</span>
                         </div>
                     </div>
                 </Modal.Body>
                 <Modal.Footer>
                     <Button variant="secondary" onClick={() => setShowModalConfirm(false)}
-                            style={{minWidth: '80px'}} type="button">
+                        style={{ minWidth: '80px' }} type="button">
                         Hủy
                     </Button>
                     <Button variant="primary" type="submit"
-                            onClick={handleConfirm}>
+                        onClick={handleConfirm}>
                         Xác nhận
                     </Button>
                 </Modal.Footer>

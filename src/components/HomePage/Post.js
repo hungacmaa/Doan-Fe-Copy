@@ -12,12 +12,12 @@ const Post = ({ posts, totalPages, changePage }) => {
                         posts.map(post => {
                             return (
                                 <div className="col-3" key={post.id}>
-                                    <div className="border rounded overflow-hidden">
+                                    <div className="border overflow-hidden" style={{borderRadius: "50px"}}>
                                         <Link to={`/posts/${post.id}`} className="nav-link">
                                             <div className="position-relative overflow-hidden">
                                                 <div>
                                                     <img className="img-thumbnail" src={post.avatar} alt=""
-                                                        style={{ aspectRatio: '1/1' }} />
+                                                        style={{aspectRatio: '1/1', borderRadius: "50px"}} />
                                                 </div>
                                             </div>
                                             <div className="pt-4 px-3">

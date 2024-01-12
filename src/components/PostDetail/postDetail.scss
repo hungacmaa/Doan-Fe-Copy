@@ -12,6 +12,11 @@
         margin-top: 1rem;
         font-size: larger;
 
+        .post-label {
+            display: inline-block;
+            width: 200px;
+        }
+
         .user-avatar{
             height: 60px;
             width: 60px;
@@ -23,6 +28,7 @@
             padding: 0 8px 8px 8px;
             border-radius: 12px;
             display: inline-block;
+            margin-left: 8px;
         }
     }
 
@@ -49,6 +55,14 @@
 
     .mySwiper .swiper-slide-thumb-active {
         opacity: 1;
+    }
+
+    .mySwiper .swiper-slide-thumb-active {
+        opacity: 1;
+
+        img {
+            border: 2px solid rgb(0, 185, 142);
+        }
     }
 
     .swiper-slide img {

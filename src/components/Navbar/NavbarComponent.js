@@ -1,5 +1,5 @@
 import './navbar.scss';
-import icon_house from '../../image/icons8-product.gif';
+import icon_house from '../../image/logo.png';
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import _ from 'lodash';
@@ -113,7 +113,7 @@ const Navbar = () => {
                 <nav className="navbar-light py-2 d-flex justify-content-between align-items-center">
                     <Link to={"/"} className="navbar-brand d-flex align-items-center text-center">
                         <div className="me-2">
-                            <img className="img-fluid" src={icon_house} alt="Icon" />
+                            <img className="img-fluid" src={icon_house} alt="Icon" style={{maxHeight: "80px"}}/>
                         </div>
                         <h2 className='brand-name'>WDYT</h2>
                     </Link>

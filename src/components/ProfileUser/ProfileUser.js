@@ -45,7 +45,7 @@ const ProfileUser = () => {
 
     useEffect(() => {
         if (userId) {
-            getAllPostsByAccountId(userId, currentPage - 1, 5, {category: 'Sản phẩm muốn trao đổi'}).then(response => {
+            getAllPostsByAccountId(userId, currentPage - 1, 8, {category: 'Sản phẩm muốn trao đổi'}).then(response => {
                 setPosts(response.data.content);
                 setTotalPages(response.data.totalPages);
             }).catch(error => console.log(error));
@@ -73,15 +73,15 @@ const ProfileUser = () => {
                 <div className="col-3 text-center">
                     <img src={accountInfo.avatar ? accountInfo.avatar : image_user} alt="" height={200}
                          width={200}
-                         style={{"borderRadius": "50%"}}/>
+                         style={{"borderRadius": "50%", border: "4px solid grey"}}/>
                 </div>
                 <div className="col-9">
                     <Table hover>
                         <thead>
-                        {/* <tr>
-                            <th>Tên tài khoản:</th>
+                        <tr>
+                            <th>Username:</th>
                             <td>{accountInfo.username}</td>
-                        </tr> */}
+                        </tr>
                         <tr>
                             <th>Họ và tên:</th>
                             <td>{accountInfo.name}</td>

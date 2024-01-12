@@ -1,16 +1,16 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import _ from "lodash";
-import {Table} from "reactstrap";
-import {Pagination} from "@mui/material";
-import {Link, useNavigate} from "react-router-dom";
-import {formatDate} from "../../../service/format";
-import {getAllPostsByAccountId} from "../../../service/accountService";
-import {useSelector} from "react-redux";
-import {Modal} from "react-bootstrap";
-import {ErrorMessage, Field, Form, Formik} from "formik";
+import { Table } from "reactstrap";
+import { Pagination } from "@mui/material";
+import { Link, useNavigate } from "react-router-dom";
+import { formatDate } from "../../../service/format";
+import { getAllPostsByAccountId } from "../../../service/accountService";
+import { useSelector } from "react-redux";
+import { Modal } from "react-bootstrap";
+import { ErrorMessage, Field, Form, Formik } from "formik";
 import axios from "axios";
 import Swal from "sweetalert2";
-import {getAllCategories} from "../../../service/categoryService";
+import { getAllCategories } from "../../../service/categoryService";
 
 const PostListByAccount = () => {
     const [posts, setPosts] = useState([]);
@@ -25,7 +25,7 @@ const PostListByAccount = () => {
     const account = useSelector(state => state.myState.account);
 
     useEffect(() => {
-        const data = {categoryPost, categoryProductName, status, startDate, endDate};
+        const data = { categoryPost, categoryProductName, status, startDate, endDate };
         getAllPostsByAccountId(account.id, currentPage - 1, 10, data).then(response => {
             setPosts(response.data.content);
             setTotalPages(response.data.totalPages);
@@ -75,14 +75,14 @@ const PostListByAccount = () => {
         <div className="col-9">
             <h3 className="text-uppercase text-center mb-5 mt-3">Danh sách bài đăng</h3>
             <div className="mb-3 py-4 px-3"
-                 style={{backgroundColor: "rgb(220,219,219)"}}>
+                style={{ backgroundColor: "rgb(220,219,219)" }}>
                 <div className='row g-2'>
                     <div className="col-3">
                         <label className="form-label fw-medium">
                             Danh mục bài đăng
                         </label>
                         <select className="form-select py-2 border-0"
-                                onChange={handleChangeCategoryPost}>
+                            onChange={handleChangeCategoryPost}>
                             <option value="">Tất cả</option>
                             <option value="Sản phẩm muốn trao đổi">Sản phẩm muốn trao đổi</option>
                             <option value="Sản phẩm cần tìm trao đổi">Sản phẩm cần tìm trao đổi</option>
@@ -94,7 +94,7 @@ const PostListByAccount = () => {
                             Danh mục sản phẩm
                         </label>
                         <select id="categoryProduct" className="form-select border-0 py-2"
-                                onChange={handleChangeCategoryProductName}>
+                            onChange={handleChangeCategoryProductName}>
                             <option value="">Tất cả</option>
                             {!_.isEmpty(categories) && categories.map(item => (
                                 <option value={item.name} key={item.id}>
@@ -107,7 +107,7 @@ const PostListByAccount = () => {
                     <div className="col-2">
                         <label className="form-label fw-medium">Trạng thái</label>
                         <select className="form-select py-2 border-0"
-                                onChange={handleChangeStatus}>
+                            onChange={handleChangeStatus}>
                             <option value="">Tất cả</option>
                             <option value="Chưa trao đổi">Chưa trao đổi</option>
                             <option value="Chờ trao đổi">Chờ trao đổi</option>
@@ -120,13 +120,13 @@ const PostListByAccount = () => {
                     <div className="col-2">
                         <div className="text-center mb-2 fw-medium">Ngày bắt đầu</div>
                         <input type="date" className="form-control border-0 py-2"
-                               onChange={handleChangeStartDate}/>
+                            onChange={handleChangeStartDate} />
                     </div>
 
                     <div className="col-2">
                         <div className="text-center mb-2 fw-medium">Ngày kết thúc</div>
                         <input type="date" className="form-control border-0 py-2"
-                               onChange={handleChangeEndDate}/>
+                            onChange={handleChangeEndDate} />
                     </div>
                 </div>
             </div>
@@ -137,49 +137,62 @@ const PostListByAccount = () => {
 
             <Table hover>
                 <thead>
-                <tr align="center">
-                    <th>STT</th>
-                    <th>Tên bài đăng</th>
-                    <th>Ngày đăng</th>
-                    <th>Trạng thái</th>
-                    <th>Hành động</th>
-                </tr>
-                </thead>
-                <tbody style={{verticalAlign: 'middle'}}>
-                {!_.isEmpty(posts) ?
-                    posts.map((item, index) => (
-
-                        <tr key={item.id} align="center">
-                            <td>{index + 1}</td>
-                            <td>
-                                <Link to={`/posts/${item.id}`} className="nav-link fw-medium text-start">
-                                    <img className="img-thumbnail me-3" src={item.avatar} alt="" width={80}
-                                         style={{height: 80}}/>
-                                    {item.title}
-                                </Link>
-                            </td>
-                            <td>{formatDate(item.createdAt)}</td>
-                            <td>{item.status}</td>
-                            <td>
-                                <Link to={`/edit-post/${item.id}`}
-                                    className="btn border border-danger text-danger"
-                                    style={{minWidth: '100px'}}>
-                                    Sửa bài đăng
-                                </Link>
-                            </td>
-                        </tr>
-                    ))
-                    :
                     <tr align="center">
-                        <td colSpan="5" className="pt-3 fs-5 text-danger">Danh sách trống</td>
+                        <th>STT</th>
+                        <th>Tên bài đăng</th>
+                        <th>Ngày đăng</th>
+                        <th>Trạng thái</th>
+                        <th>Hành động</th>
                     </tr>
-                }
+                </thead>
+                <tbody style={{ verticalAlign: 'middle' }}>
+                    {!_.isEmpty(posts) ?
+                        posts.map((item, index) => (
+
+                            <tr key={item.id} align="center">
+                                <td>{index + 1}</td>
+                                <td>
+                                    {/* <Link to={`/posts/${item.id}`} className="nav-link fw-medium text-start">
+                                        <img className="img-thumbnail me-3" src={item.avatar} alt="" width={80}
+                                            style={{ height: 80 }} />
+                                        {item.title}
+                                    </Link> */}
+
+                                    <div style={{ paddingLeft: "40px", textAlign: "left" }}>
+
+                                        <Link to={`/posts/${item.id}`} className="nav-link fw-medium text-start">
+                                            <img src={item.avatar} style={{ width: "80px", height: "80px", marginRight: "1rem" }}></img>
+                                            {item.title}
+                                        </Link>
+                                    </div>
+                                </td>
+                                <td>{formatDate(item.createdAt)}</td>
+                                <td>{item.status}</td>
+                                <td>
+                                    <Link to={`/edit-post/${item.id}`}
+                                        className="btn border-primary border-primary text-primary"
+                                        style={{ minWidth: '100px', marginRight: "20px"}}>
+                                        Sửa bài đăng
+                                    </Link>
+                                    
+                                    <button className="btn border border-danger text-danger"
+                                    >
+                                        Xóa
+                                    </button>
+                                </td>
+                            </tr>
+                        ))
+                        :
+                        <tr align="center">
+                            <td colSpan="5" className="pt-3 fs-5 text-danger">Danh sách trống</td>
+                        </tr>
+                    }
                 </tbody>
             </Table>
             {totalPages > 0 ?
                 <div className="col-12 mt-5 d-flex justify-content-center">
                     <Pagination count={totalPages} size="large" variant="outlined" shape="rounded"
-                                onChange={changePage} color="primary"/>
+                        onChange={changePage} color="primary" />
                 </div>
                 :
                 null

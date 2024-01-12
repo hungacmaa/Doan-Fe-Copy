@@ -26,7 +26,7 @@ const Images = ({images}) => {
             >
                 {images.map(image =>
                     <SwiperSlide key={image.id}>
-                        <img className="img-thumbnail" src={image.url} alt=""/>
+                        <img className="img-thumbnail" src={image.url} alt="" style={{borderRadius: "50px", padding: "0", border: "4px solid grey"}}/>
                     </SwiperSlide>
                 )}
             </Swiper>
@@ -41,7 +41,7 @@ const Images = ({images}) => {
             >
                 {images.map((image, index) =>
                     <SwiperSlide key={index}>
-                        <img src={image.url} alt=""/>
+                        <img src={image.url} alt="" style={{borderRadius: "50px"}}/>
                     </SwiperSlide>
                 )}
             </Swiper>
