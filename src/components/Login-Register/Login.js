@@ -51,7 +51,7 @@ function Login() {
                                                 password: values.password
                                             }
                                             setLoginError('')
-                                            axios.post("http://34.204.174.17:8080/login", account).then(resp => {
+                                            axios.post("http://3.225.221.144:8080/login", account).then(resp => {
                                                 dispatch(getAccountLogin(resp.data))
                                                 localStorage.setItem('account', JSON.stringify(resp.data));
                                                 Swal.fire({
